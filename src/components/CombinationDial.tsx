@@ -346,7 +346,11 @@ function CombinationDialComponent({
       accessibilityRole="adjustable"
       accessibilityLabel="Disco de combinação VAULT"
       accessibilityHint="Gire para escolher um número e pressione o centro para registrar."
-      accessibilityValue={{ text: formatStep(value) }}
+      accessibilityValue={{ min: 0, max: DIAL_STEPS - 1, now: value, text: formatStep(value) }}
+      aria-valuemin={0}
+      aria-valuemax={DIAL_STEPS - 1}
+      aria-valuenow={value}
+      aria-valuetext={formatStep(value)}
       accessibilityActions={[
         { name: 'increment' },
         { name: 'decrement' },

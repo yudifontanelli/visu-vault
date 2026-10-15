@@ -29,6 +29,10 @@ export function Hoverable({
   return (
     <Pressable
       {...rest}
+      // Mirror state into ARIA props: react-native-web reads these, not accessibilityState.
+      aria-selected={rest.accessibilityState?.selected}
+      aria-checked={rest.accessibilityState?.checked}
+      aria-disabled={rest.accessibilityState?.disabled}
       accessibilityRole={accessibilityRole}
       onHoverIn={(e) => {
         setHovered(true);

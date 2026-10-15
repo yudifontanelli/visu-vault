@@ -35,6 +35,8 @@ export function Checkbox({
       disabled={disabled}
       accessibilityRole="checkbox"
       accessibilityState={{ checked, disabled: !!disabled }}
+      aria-checked={checked}
+      aria-disabled={!!disabled}
       style={({ pressed }) => [styles.row, pressed && styles.pressed]}
       hitSlop={4}
     >

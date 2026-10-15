@@ -72,6 +72,7 @@ export function Tabs<K extends string>({
             }}
             accessibilityRole="tab"
             accessibilityState={{ selected: active }}
+            aria-selected={active}
             style={({ pressed }) => [styles.tab, pressed && styles.pressed]}
             hitSlop={6}
           >

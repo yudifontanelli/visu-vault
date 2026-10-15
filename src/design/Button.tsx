@@ -82,6 +82,8 @@ export function Button({
       accessibilityLabel={accessibilityLabel ?? label}
       accessibilityHint={accessibilityHint}
       accessibilityState={{ disabled: !!disabled, selected: !!selected }}
+      aria-disabled={!!disabled}
+      aria-pressed={selected === undefined ? undefined : selected}
       hitSlop={size === 'sm' ? 6 : 4}
       style={({ pressed }) => [
         styles.base,
