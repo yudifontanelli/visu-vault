@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "VAULT",
+    "slug": "visuvault-vault",
+    "version": "0.1.0",
+    "scheme": "vault",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0A0A0A",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.visuvault.vault"
+    },
+    "android": {
+      "package": "com.visuvault.vault",
+      "adaptiveIcon": {
+        "backgroundColor": "#0A0A0B",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png",
+      "lang": "pt-BR",
+      "name": "VAULT",
+      "shortName": "VAULT",
+      "description": "Workspace criativo privado da Visuvault.",
+      "themeColor": "#0A0A0A",
+      "backgroundColor": "#F5F1E8"
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#F5F1E8"
+        }
+      ],
+      "expo-font"
+    ]
+  }
+}
