@@ -55,12 +55,14 @@ export function VRule({ style, strong }: { style?: StyleProp<ViewStyle>; strong?
   return <View style={[{ width: StyleSheet.hairlineWidth, alignSelf: 'stretch', backgroundColor: lineColor(surface, strong) }, style]} />;
 }
 
-/** Table-of-contents dot leaders: "Brainstorm . . . . . . 14". */
+/** Table-of-contents dot leaders: "Brainstorm . . . . . . 14". Clipped, never ellipsised. */
 export function Leaders({ tone = 'muted' }: { tone?: Tone }) {
   return (
-    <T variant="numeral" tone={tone} numberOfLines={1} ellipsizeMode="clip" style={styles.leaders} accessible={false}>
-      {' . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .'}
-    </T>
+    <View style={styles.leaders} accessible={false} importantForAccessibility="no-hide-descendants">
+      <T variant="numeral" tone={tone} style={styles.leadersText}>
+        {'. '.repeat(160)}
+      </T>
+    </View>
   );
 }
 
@@ -127,7 +129,8 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row' },
   center: { alignItems: 'center' },
   ruleLabel: { marginRight: 10 },
-  leaders: { flex: 1, overflow: 'hidden', marginHorizontal: 6 },
+  leaders: { flex: 1, overflow: 'hidden', height: 15, marginHorizontal: 6 },
+  leadersText: { width: 2400 },
   tag: {
     borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: 6,
