@@ -110,6 +110,19 @@ export function Stamp({
   );
 }
 
+/** Hairline progress meter: a thin track with an ink (or paper) fill. */
+export function Meter({ ratio, style }: { ratio: number; style?: StyleProp<ViewStyle> }) {
+  const surface = useSurface();
+  const track = surface === 'paper' ? palette.paperDim : palette.graphite700;
+  const fill = surface === 'paper' ? palette.ink : palette.paper;
+  const r = Math.max(0, Math.min(1, ratio));
+  return (
+    <View style={[styles.meter, { backgroundColor: track }, style]} accessibilityRole="progressbar" accessibilityValue={{ min: 0, max: 100, now: Math.round(r * 100) }}>
+      <View style={[styles.meter, { width: `${r * 100}%`, backgroundColor: fill }]} />
+    </View>
+  );
+}
+
 /** Small monogram square (team members). */
 export function Monogram({ initials, size = 36, inverted }: { initials: string; size?: number; inverted?: boolean }) {
   const surface = useSurface();
@@ -149,6 +162,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   stampText: { letterSpacing: 3 },
+  meter: { height: 2 },
   mono: {
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
