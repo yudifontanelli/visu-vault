@@ -3,6 +3,7 @@ import { Animated, Easing, Platform, Pressable, StyleSheet, View } from 'react-n
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
+import { VaultWordmark } from '../components/VaultWordmark';
 import { EscutcheonGroup, RegistrationMark } from '../design/engravings/Engravings';
 import { KEYHOLE_CENTER_OFFSET, keyholePath } from '../design/engravings/geometry';
 import { ease, useNativeDriver, useReducedMotion } from '../design/motion';
@@ -137,9 +138,7 @@ export function SplashScreen({ onReveal, onDone }: { onReveal: () => void; onDon
           {/* Title block sits just under the escutcheon (plate bottom = 9r below the keyhole centre). */}
           <View style={[styles.center, { top: ky + 9 * r + 26 }]}>
             <Animated.View style={rise(0.35)}>
-              <T variant="display" align="center" style={styles.wordmark}>
-                VAULT
-              </T>
+              <VaultWordmark size={isPhone ? 44 : 64} align="center" publisher={false} />
             </Animated.View>
             <Animated.View style={rise(0.5)}>
               <T variant="subtitle" align="center" tone="secondary" style={styles.tagline}>
@@ -181,7 +180,6 @@ const styles = StyleSheet.create({
   bar: { flexDirection: 'row', justifyContent: 'space-between', gap: 12 },
   rule: { marginTop: 10 },
   center: { position: 'absolute', left: 16, right: 16, alignItems: 'center' },
-  wordmark: { letterSpacing: 14, marginLeft: 14 },
   tagline: { maxWidth: 440, marginTop: 6 },
   page: { justifyContent: 'space-between' },
   footerBar: { marginTop: 10 },

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { VaultMark } from '../components/VaultWordmark';
+import { VaultMark, VaultWordmark } from '../components/VaultWordmark';
 import { Button } from '../design/Button';
 import { Dialog } from '../design/Dialog';
 import { Hoverable } from '../design/Hoverable';
@@ -111,9 +111,7 @@ export function WorkspaceScreen({ onLock }: Props) {
           {section === 'home' ? (
             <View style={styles.brand}>
               <VaultMark size={20} />
-              <T variant="heading" style={styles.brandWord}>
-                VAULT
-              </T>
+              <VaultWordmark size="sm" publisher={false} />
             </View>
           ) : (
             <Hoverable onPress={() => go('home')} accessibilityLabel="Voltar ao sumário" hitSlop={10}>
@@ -207,14 +205,7 @@ function Sidebar({
     <View style={[styles.sidebar, { paddingTop: topInset + 26 }]}>
       <View style={styles.brand}>
         <VaultMark size={26} />
-        <View>
-          <T variant="title" style={styles.brandWord}>
-            VAULT
-          </T>
-          <T variant="micro" tone="muted">
-            by VISUVAULT
-          </T>
-        </View>
+        <VaultWordmark size="md" />
       </View>
       <Rule weight="double" style={styles.sideRule} />
       <T variant="micro" tone="muted" style={styles.sideLabel}>
@@ -283,7 +274,6 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: palette.ink },
   pressed: { opacity: 0.6 },
   brand: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  brandWord: { letterSpacing: 6 },
   topBar: {
     height: layout.headerHeight,
     paddingHorizontal: 20,

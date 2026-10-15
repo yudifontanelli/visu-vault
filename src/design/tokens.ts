@@ -1,29 +1,36 @@
 /**
- * VAULT design tokens.
+ * VAULT design tokens — 2.0 "Editorial + Mesa Criativa".
  *
- * Contemporary structure, vintage-editorial soul: ink black, paper off-white and
- * a warm graphite ramp. One signal colour (oxide) exists only for errors and
- * overdue states. No gradients beyond the dial's metal, no neon, no decoration
- * without a job.
+ * Four official colours and nothing else: black, off-white, graphite and warm
+ * grey. The ramp below only fills the steps between them (lines, hover,
+ * secondary text). No gradients, no neon, no alert colour: errors and overdue
+ * states are said in words and contrast, never by colour alone.
  */
 
-export const palette = {
-  ink: '#0A0A0A',
-  ink2: '#101010',
-  graphite900: '#161615',
-  graphite800: '#1D1C1B',
-  graphite700: '#2A2927',
-  graphite600: '#3A3936',
-  graphite500: '#57544F',
-  graphite400: '#7E7A73',
-  graphite300: '#A29D94',
-  graphite200: '#C8C2B7',
-  paperDim: '#E7E1D4',
-  paper: '#F5F1E8',
-  oxide: '#B4442F',
+/** The official brand palette. Everything else derives from these four. */
+export const brand = {
+  black: '#0A0A0A',
+  offWhite: '#F5F1E8',
+  graphite: '#262626',
+  warmGray: '#A8A39A',
 } as const;
 
-/** Semantic roles. `on ink` is the app's default surface; `sheet` is printed paper. */
+export const palette = {
+  ink: brand.black,
+  ink2: '#101010',
+  graphite900: '#161616',
+  graphite800: '#1D1D1D',
+  graphite700: brand.graphite,
+  graphite600: '#3A3936',
+  graphite500: '#57544F',
+  graphite400: '#8A867E',
+  graphite300: brand.warmGray,
+  graphite200: '#C8C2B7',
+  paperDim: '#EAE5DA',
+  paper: brand.offWhite,
+} as const;
+
+/** Semantic roles. `ink` is the dark surface; `sheet` is off-white paper. */
 export const color = {
   bg: palette.ink,
   surface: palette.graphite900,
@@ -32,19 +39,27 @@ export const color = {
   lineStrong: palette.graphite500,
   text: palette.paper,
   textSecondary: palette.graphite300,
-  /** Smallest text allowed on ink (≈4.6:1). Anything dimmer is decoration only. */
+  /** Smallest text allowed on ink (≥4.5:1). Anything dimmer is decoration only. */
   textMuted: palette.graphite400,
   sheet: palette.paper,
   sheetDim: palette.paperDim,
   sheetText: palette.ink,
-  /** Smallest text allowed on paper (≈6.7:1). */
+  /** Smallest text allowed on paper (≥4.5:1). Warm grey is never text on paper. */
   sheetTextSecondary: palette.graphite500,
-  sheetLine: '#CFC8BA',
-  signal: palette.oxide,
+  sheetLine: '#D3CCBF',
   scrim: 'rgba(5,5,5,0.86)',
 } as const;
 
 export type Surface = 'ink' | 'paper';
+
+/**
+ * Emphasis for errors, conflicts and overdue items: the strongest colour on the
+ * surface. Always paired with words ("Atrasada", "Conflito"), never colour alone.
+ */
+export const emphasis: Record<Surface, string> = {
+  ink: palette.paper,
+  paper: palette.ink,
+};
 
 export const space = {
   0: 0,
@@ -76,12 +91,13 @@ export const border = {
   heavy: 2,
 } as const;
 
+/** Soft and short. Depth is a hint, never a drop-shadow effect. */
 export const shadow = {
   /** A sheet resting on the desk. */
-  sheet: '0px 18px 40px rgba(0,0,0,0.45)',
+  sheet: '0px 6px 18px rgba(0,0,0,0.22)',
   /** An object lifted while dragged. */
-  lift: '0px 26px 50px rgba(0,0,0,0.55)',
-  item: '0px 8px 22px rgba(0,0,0,0.38)',
+  lift: '0px 12px 28px rgba(0,0,0,0.30)',
+  item: '0px 2px 8px rgba(0,0,0,0.18)',
 } as const;
 
 export const layout = {

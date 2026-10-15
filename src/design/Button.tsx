@@ -63,8 +63,13 @@ export function Button({
       textColor = hovered || selected ? fg : onPaper ? color.sheetTextSecondary : color.textSecondary;
       break;
     case 'danger':
-      containerStyle = { borderColor: hovered ? color.signal : onPaper ? color.sheetLine : color.lineStrong };
-      textColor = color.signal;
+      // Destructive actions read as the strongest outline on the surface; the label says what happens.
+      containerStyle = {
+        borderColor: fg,
+        borderWidth: 1,
+        backgroundColor: hovered ? (onPaper ? palette.paperDim : palette.graphite800) : 'transparent',
+      };
+      textColor = fg;
       break;
   }
 

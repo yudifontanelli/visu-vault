@@ -3,12 +3,12 @@ import { Animated, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CombinationDial } from '../components/CombinationDial';
-import { VaultMark } from '../components/VaultWordmark';
+import { VaultMark, VaultWordmark } from '../components/VaultWordmark';
 import { RegistrationMark, VintageKey } from '../design/engravings/Engravings';
 import { ease, tween, useReducedMotion } from '../design/motion';
 import { Rule } from '../design/primitives';
 import { T } from '../design/Typography';
-import { color, palette } from '../design/tokens';
+import { palette } from '../design/tokens';
 import { useAnimatedValue } from '../hooks/useAnimatedValue';
 import { useResponsive } from '../hooks/useResponsive';
 import {
@@ -139,7 +139,7 @@ export function LockScreen({ onUnlocked, active = true }: Props) {
               <T
                 variant="labelStrong"
                 size={14}
-                color={unlocked ? palette.ink : isError && filled ? color.signal : filled ? palette.paper : palette.graphite500}
+                color={unlocked ? palette.ink : filled ? palette.paper : palette.graphite500}
               >
                 {filled ? formatStep(entry) : '––'}
               </T>
@@ -230,14 +230,7 @@ export function LockScreen({ onUnlocked, active = true }: Props) {
           <Animated.View style={[styles.card, lift(12)]}>
             <View style={styles.brand}>
               <VaultMark size={30} />
-              <View>
-                <T variant="title" style={styles.brandWord}>
-                  VAULT
-                </T>
-                <T variant="micro" tone="muted">
-                  by VISUVAULT
-                </T>
-              </View>
+              <VaultWordmark size="md" />
             </View>
             <T variant="display" style={styles.headline} accessibilityRole="header">
               Acesso{'\n'}
@@ -297,9 +290,7 @@ export function LockScreen({ onUnlocked, active = true }: Props) {
       <View style={styles.column}>
         <Animated.View style={[styles.brand, lift(8)]}>
           <VaultMark size={24} />
-          <T variant="heading" style={styles.brandWordSm}>
-            VAULT
-          </T>
+          <VaultWordmark size="sm" />
         </Animated.View>
         <Animated.View style={[styles.readoutPhone, lift(10)]}>
           {reading}
@@ -337,8 +328,6 @@ const styles = StyleSheet.create({
   },
   card: { width: 380, gap: 24 },
   brand: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  brandWord: { letterSpacing: 8 },
-  brandWordSm: { letterSpacing: 6 },
   headline: { marginTop: 4 },
   index: { gap: 0 },
   indexRow: { flexDirection: 'row', alignItems: 'center', minHeight: 56, paddingVertical: 10 },
@@ -357,7 +346,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   slotFilled: { borderColor: palette.paperDim },
-  slotError: { borderColor: color.signal },
+  slotError: { borderColor: palette.paper, borderStyle: 'dashed' },
   slotUnlocked: { borderColor: palette.paper, backgroundColor: palette.paper },
   message: { maxWidth: 320, minHeight: 40 },
   readoutPhone: { alignItems: 'center', gap: 10 },

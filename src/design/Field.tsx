@@ -37,7 +37,7 @@ export const Field = forwardRef<TextInput, FieldProps>(function Field(
         ref={ref}
         {...rest}
         multiline={multiline}
-        placeholderTextColor={onPaper ? palette.graphite400 : palette.graphite500}
+        placeholderTextColor={onPaper ? palette.graphite500 : palette.graphite400}
         selectionColor={onPaper ? palette.graphite500 : palette.graphite300}
         onFocus={(e) => {
           setFocused(true);

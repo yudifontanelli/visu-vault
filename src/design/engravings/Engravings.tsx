@@ -1,10 +1,14 @@
 import { memo, useMemo } from 'react';
+import { Platform } from 'react-native';
 import Svg, { Circle, ClipPath, Defs, G, Line, Path, Rect } from 'react-native-svg';
 
 import { palette } from '../tokens';
 import { guillochePath, hatchPath, keyholePath } from './geometry';
 
 /* All ornaments are line engravings: one ink, hairline strokes, no fills beyond solids. */
+
+/** Ornaments are decorative. On web the <svg> gets aria-hidden (a DOM attribute), natively the RN prop. */
+const decorative = Platform.OS === 'web' ? { 'aria-hidden': true as const } : { accessibilityElementsHidden: true };
 
 const PLATE =
   'M 0 -122 C 30 -100, 72 -80, 70 -40 C 68 -10, 48 5, 48 20 C 48 35, 68 50, 70 80 ' +
@@ -100,7 +104,7 @@ export const Rosette = memo(function Rosette({
     return parts.slice(0, Math.max(1, Math.min(3, rings + 1))).join(' ');
   }, [rings]);
   return (
-    <Svg width={size} height={size} viewBox="0 0 200 200" opacity={opacity} accessibilityElementsHidden>
+    <Svg width={size} height={size} viewBox="0 0 200 200" opacity={opacity} {...decorative}>
       <Circle cx={100} cy={100} r={95} stroke={stroke} strokeWidth={0.8} fill="none" />
       <Circle cx={100} cy={100} r={91} stroke={stroke} strokeWidth={0.4} fill="none" />
       <Path d={d} stroke={stroke} strokeWidth={0.45} fill="none" />
@@ -111,7 +115,7 @@ export const Rosette = memo(function Rosette({
 /** Printer's registration mark. */
 export function RegistrationMark({ size = 18, stroke = palette.graphite500 }: { size?: number; stroke?: string }) {
   return (
-    <Svg width={size} height={size} viewBox="0 0 20 20" accessibilityElementsHidden>
+    <Svg width={size} height={size} viewBox="0 0 20 20" {...decorative}>
       <Circle cx={10} cy={10} r={5.2} stroke={stroke} strokeWidth={0.8} fill="none" />
       <Line x1={10} y1={0.5} x2={10} y2={19.5} stroke={stroke} strokeWidth={0.8} />
       <Line x1={0.5} y1={10} x2={19.5} y2={10} stroke={stroke} strokeWidth={0.8} />
@@ -142,7 +146,7 @@ export const VintageKey = memo(function VintageKey({
   const bitHatch = useMemo(() => hatchPath(226, 60, 40, 40, 3.4, -35), []);
   const bit = 'M228 61 L262 61 L262 98 L252 98 L252 86 L244 86 L244 98 L236 98 L236 78 L228 78 Z';
   return (
-    <Svg width={width} height={(width * 110) / 300} viewBox="0 0 300 110" opacity={opacity} accessibilityElementsHidden>
+    <Svg width={width} height={(width * 110) / 300} viewBox="0 0 300 110" opacity={opacity} {...decorative}>
       <Defs>
         <ClipPath id="vk-shaft">
           <Rect x={110} y={55} width={150} height={6} />

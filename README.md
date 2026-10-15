@@ -9,7 +9,23 @@ TypeScript**.
 > no iPhone, localStorage no navegador) e podem ser restauradas para o conteúdo de demonstração. Nenhum serviço
 > pago está configurado.
 
-## Direção de arte
+## VAULT 2.0 — em andamento
+
+Redesign "Editorial + Mesa Criativa" para os três fundadores produzirem conteúdo para o Instagram. O trabalho
+acontece na branch `claude/vault-2-redesign`, sem substituir a versão atual antes dos testes.
+
+| Etapa | Estado |
+| --- | --- |
+| 1 · Auditoria | Concluída: [`docs/AUDITORIA-VAULT-2.md`](docs/AUDITORIA-VAULT-2.md) |
+| 2 · Design system e tipografia | Concluída: paleta oficial, logotipo, Instrument Sans na interface, ícones, contraste testado |
+| 3–10 · Perfis, login, Início, Mesa Criativa, Editorial, Acervo, responsividade, prévia | Pendentes. Dependem dos materiais listados na auditoria. |
+
+**Logotipo:** VAULT deve ser composto em Canela Regular 400. Não há licença nem arquivos dessa fonte no projeto, então
+**o logotipo usa Georgia provisoriamente**. A troca é feita num só lugar (`BRAND_FAMILY` em `src/design/fonts.ts`).
+
+**Espécime do design system:** `npm run web` e abra `http://localhost:8081/?sistema`.
+
+## Direção de arte (1.0)
 
 Estrutura contemporânea, alma editorial vintage.
 
@@ -43,19 +59,24 @@ abre listas e depois o detalhe.
 
 | Arquivo | Conteúdo |
 | --- | --- |
-| `tokens.ts` | Cores (`ink #0A0A0A`, `paper #F5F1E8`, rampa grafite quente, `oxide` só para erro/atraso), espaçamento (base 4), raios quase nulos, fios, sombras, layout, durações e curvas de movimento. |
-| `fonts.ts` | Instrument Serif (voz editorial), Instrument Sans (interface e texto), IBM Plex Mono (microtipografia técnica). Todas OFL e embutidas no app; há fallback para fontes do sistema. |
-| `Typography.tsx` | `T` com variantes (`masthead`, `display`, `headline`, `title`, `subtitle`, `caption`, `body`, `label`, `micro`, `numeral`…), escala menor no celular e cor automática por superfície (tinta sobre papel / papel sobre tinta). |
+| `tokens.ts` | Paleta oficial 2.0, só quatro cores: preto `#0A0A0A`, off-white `#F5F1E8`, grafite `#262626` e cinza quente `#A8A39A`, com a rampa intermediária derivada delas. `emphasis` dá ênfase de erro/atraso sem cor extra. Também espaçamento (base 4), raios quase nulos, fios, sombras leves, layout, durações e curvas de movimento. |
+| `fonts.ts` | Logotipo em Canela Regular 400; por enquanto **Georgia, provisória**, até haver licença. Instrument Sans em todo o texto funcional e Instrument Serif nos títulos editoriais (OFL, embutidas). IBM Plex Mono só na inscrição do aro do disco e nas pranchas gerativas. Há fallback para fontes do sistema. |
+| `Typography.tsx` | `T` com variantes (`wordmark`, `display`, `headline`, `title`, `subtitle`, `caption`, `body`, `label`, `micro`, `numeral`…), espacejamento em em, algarismos tabulares, escala menor no celular e cor automática por superfície. |
+| `Icon.tsx` | Ícones de traço único (grade 24): os quatro ambientes (`inicio`, `mesa`, `editorial`, `acervo`) e as ações. |
+| `contrast.ts` | Cálculo de contraste WCAG. Os testes garantem AA para todo papel de texto em cada superfície. |
+| `Specimen.tsx` | Espécime vivo do sistema (`?sistema` na web). |
 | `primitives.tsx` | Fios (`Rule` simples/duplo), pontilhado de índice, `Tag`, `Stamp` (carimbo), `Monogram`, `Meter`. |
 | `Button`, `Field`, `Checkbox`, `Tabs`, `Dialog`, `Toast` | Controles quadrados com rótulo mono, campos sublinhados, checklist com traço de caneta, abas com fio deslizante, formulários como fichas de papel, avisos discretos com ação. |
-| `Sheet.tsx` | Papel impresso sobre a mesa escura: grão, sombra e marcas de corte. |
+| `Sheet.tsx` | Folha off-white sobre a mesa escura, com sombra leve e marcas de corte opcionais. O grão vem desligado por padrão. |
 | `SectionHeader`, `Page`, `Reveal`, `Hoverable` | Abertura de seção, margens editoriais, entrada editorial (respeita “reduzir movimento”) e estados de hover/press. |
 | `engravings/` | Gravuras procedurais em SVG (escudo de fechadura, chave antiga, roseta guilhochê, marca de registro) com geometria pura testada. |
 | `motion.ts`, `haptics.ts` | Animações com driver nativo e feedback tátil no iPhone. |
 
 **Regras de uso:**
-- Texto pequeno sobre tinta usa no mínimo `graphite400` (≈4,6:1). Sobre papel, no mínimo `graphite500` (≈6,7:1).
-- O `oxide` aparece só em erros e atrasos, mais o fio vermelho das fichas de arquivo.
+- Texto pequeno sobre preto usa no mínimo `graphite400` (≥4,5:1, inclusive sobre a superfície elevada). Sobre
+  off-white, no mínimo `graphite500` (≈6,7:1). O cinza quente nunca é texto pequeno sobre off-white (2,2:1).
+- Não há cor de alerta. Erros, conflitos e atrasos são ditos em palavras e com a ênfase máxima da superfície.
+- O logotipo VAULT só aparece pelo componente `VaultWordmark` (VISUVAULT® sobre VAULT), nunca digitado com `<T>`.
 - A marca nunca contém números (nem 1294).
 
 ## Começando
@@ -74,13 +95,13 @@ mouse, as setas (Shift = 10) e Enter. A dica da sequência demo está em “Modo
 ## Verificações
 
 ```bash
-npm run check      # tsc + eslint (eslint-config-expo) + 54 testes unitários
+npm run check      # tsc + eslint (eslint-config-expo) + 59 testes unitários
 npm run build:web  # build estático em dist/
 ```
 
 Os testes cobrem a lógica pura: disco, datas, mesa (encaixe, organizar sem sobreposição, z-order), viewport
 (zoom no cursor, enquadrar), fluxo editorial e espelho, arquivamento entre Projects e Archive, catálogo,
-estudos, persistência versionada e gravuras.
+estudos, persistência versionada, gravuras e contraste da paleta.
 
 ## Estrutura
 

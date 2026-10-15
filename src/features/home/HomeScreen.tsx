@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
+import { VaultWordmark } from '../../components/VaultWordmark';
 import { Rosette } from '../../design/engravings/Engravings';
 import { Button } from '../../design/Button';
 import { Hoverable } from '../../design/Hoverable';
@@ -50,14 +51,12 @@ export function HomeScreen() {
   };
 
   const year = Number(today.slice(0, 4));
-  const mastheadSize = isPhone ? 84 : Math.min(176, Math.max(110, width * 0.1));
+  const mastheadSize = isPhone ? 64 : Math.min(140, Math.max(96, width * 0.08));
 
   const masthead = (
     <Reveal>
       <View style={[styles.mastRow, isPhone && styles.mastRowPhone]}>
-        <T variant="masthead" size={mastheadSize} style={styles.masthead} accessibilityRole="header">
-          VAULT
-        </T>
+        <VaultWordmark size={mastheadSize} asHeader />
         <View style={[styles.issue, isPhone && styles.issuePhone]}>
           <T variant="micro">Edição de estúdio · Nº 01</T>
           <T variant="micro" tone="secondary">
@@ -251,7 +250,6 @@ const styles = StyleSheet.create({
   underline: { textDecorationLine: 'underline' },
   mastRow: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', gap: 24, marginBottom: 12 },
   mastRowPhone: { flexDirection: 'column', alignItems: 'flex-start', gap: 6 },
-  masthead: { marginBottom: -10 },
   issue: { gap: 4, alignItems: 'flex-end', paddingBottom: 6 },
   issuePhone: { alignItems: 'flex-start' },
   spread: { flexDirection: 'row', gap: 36 },

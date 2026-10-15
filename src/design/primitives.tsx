@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { T, Tone, useSurface } from './Typography';
-import { border, color, palette } from './tokens';
+import { border, color, emphasis, palette } from './tokens';
 
 type RuleWeight = 'hair' | 'thin' | 'heavy' | 'double';
 
@@ -98,7 +98,7 @@ export function Stamp({
   style?: StyleProp<ViewStyle>;
 }) {
   const surface = useSurface();
-  const c = tone === 'signal' ? color.signal : tone === 'secondary' ? (surface === 'paper' ? color.sheetTextSecondary : color.textSecondary) : surface === 'paper' ? palette.ink : palette.paper;
+  const c = tone === 'signal' ? emphasis[surface] : tone === 'secondary' ? (surface === 'paper' ? color.sheetTextSecondary : color.textSecondary) : surface === 'paper' ? palette.ink : palette.paper;
   return (
     <View style={[styles.stampOuter, { borderColor: c, transform: [{ rotate: `${rotate}deg` }] }, style]} accessibilityRole="text">
       <View style={[styles.stampInner, { borderColor: c }]}>

@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   cards: { gap: 14 },
   indexCard: { padding: 16, gap: 8 },
   cardHead: { flexDirection: 'row', justifyContent: 'space-between' },
-  cardRule: { height: 1, backgroundColor: color.signal, opacity: 0.55 },
+  cardRule: { height: StyleSheet.hairlineWidth, backgroundColor: palette.graphite500 },
   cardLift: { transform: [{ translateX: 4 }] },
   pressed: { opacity: 0.85 },
   record: { padding: 14 },

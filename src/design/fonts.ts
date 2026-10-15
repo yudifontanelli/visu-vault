@@ -8,10 +8,14 @@ import { InstrumentSerif_400Regular_Italic } from '@expo-google-fonts/instrument
 import { Platform, TextStyle } from 'react-native';
 
 /**
- * Typefaces (all SIL Open Font License, bundled with the app — no font service):
- * - Instrument Serif: editorial display, headlines, captions in italic.
- * - Instrument Sans: interface and body text.
- * - IBM Plex Mono: technical micro-typography (labels, numbers, catalogue codes).
+ * Typefaces:
+ * - Brand (wordmark VAULT): Canela Regular 400 per the 2.0 brief. Canela is a
+ *   commercial face and no licence or files are in the project, so the wordmark
+ *   uses Georgia provisionally — a system face on iOS, macOS and Windows, never
+ *   downloaded or embedded. See BRAND_FAMILY below to switch.
+ * - Instrument Sans: all functional interface text (OFL, bundled).
+ * - Instrument Serif: editorial headlines and captions (OFL, bundled).
+ * - IBM Plex Mono: only the dial bezel inscription and generative plates (OFL, bundled).
  */
 export const fontAssets = {
   InstrumentSerif_400Regular,
@@ -23,14 +27,33 @@ export const fontAssets = {
   IBMPlexMono_500Medium,
 };
 
-export type FontRole = 'serif' | 'serifItalic' | 'sans' | 'sansMedium' | 'sansSemi' | 'mono' | 'monoMedium';
+export type FontRole = 'brand' | 'serif' | 'serifItalic' | 'sans' | 'sansMedium' | 'sansSemi' | 'mono' | 'monoMedium';
+
+/**
+ * Family name of the licensed Canela Regular once its files are in
+ * `assets/fonts/` and registered in `fontAssets` (e.g. 'Canela-Regular').
+ * Null means the licence is not in place and Georgia stands in.
+ */
+const BRAND_FAMILY: string | null = null;
+
+/** What the wordmark is actually set in, for documentation and the specimen. */
+export const brandFace = {
+  name: BRAND_FAMILY ? 'Canela Regular' : 'Georgia',
+  provisional: BRAND_FAMILY === null,
+} as const;
 
 const web = (family: string, fallback: string) => `${family}, ${fallback}`;
 const SERIF_FALLBACK = 'Georgia, "Times New Roman", serif';
 const SANS_FALLBACK = '"Helvetica Neue", Helvetica, Arial, sans-serif';
 const MONO_FALLBACK = 'ui-monospace, Menlo, Consolas, monospace';
+const BRAND_FALLBACK = 'Georgia, "Times New Roman", serif';
+const brandSystem = Platform.select({ ios: 'Georgia', android: 'serif', default: BRAND_FALLBACK });
+const brand: TextStyle = BRAND_FAMILY
+  ? { fontFamily: Platform.OS === 'web' ? web(BRAND_FAMILY, BRAND_FALLBACK) : BRAND_FAMILY }
+  : { fontFamily: brandSystem, fontWeight: '400' };
 
 const loaded: Record<FontRole, TextStyle> = {
+  brand,
   serif: { fontFamily: Platform.OS === 'web' ? web('InstrumentSerif_400Regular', SERIF_FALLBACK) : 'InstrumentSerif_400Regular' },
   serifItalic: {
     fontFamily: Platform.OS === 'web' ? web('InstrumentSerif_400Regular_Italic', SERIF_FALLBACK) : 'InstrumentSerif_400Regular_Italic',
@@ -48,6 +71,7 @@ const monoSystem = Platform.select({ ios: 'Menlo', android: 'monospace', default
 
 /** Used if the bundled fonts fail to load: same hierarchy, system faces. */
 const fallback: Record<FontRole, TextStyle> = {
+  brand: { fontFamily: brandSystem, fontWeight: '400' },
   serif: { fontFamily: serifSystem },
   serifItalic: { fontFamily: serifSystem, fontStyle: 'italic' },
   sans: { fontFamily: sansSystem },

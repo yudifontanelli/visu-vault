@@ -45,13 +45,14 @@ export function CropMarks({ inset = -14, length = 10, tint }: { inset?: number; 
 }
 
 /**
- * A printed sheet laid on the dark desk: paper, faint grain, optional crop marks.
+ * An off-white sheet on the dark desk, optionally with crop marks. Grain is off
+ * by default in 2.0 (no excess texture); pass `grain` only where it has a job.
  * Children inherit the paper surface (ink text).
  */
 export function Sheet({
   children,
   style,
-  grain = true,
+  grain = false,
   marks = false,
   raised = true,
   tone = 'paper',

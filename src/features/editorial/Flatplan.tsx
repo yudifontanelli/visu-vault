@@ -121,7 +121,7 @@ export function Flatplan({ selectedId, onSelect, onOpen }: { selectedId: string 
                       </T>
                     ) : null}
                     {conflict ? (
-                      <T variant="micro" size={7} color={color.signal} style={styles.conflictLabel}>
+                      <T variant="micro" size={7} color={tone ? tone.fg : info.reserved ? palette.ink : palette.paper} style={styles.conflictLabel}>
                         conflito
                       </T>
                     ) : null}
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   reserved: { backgroundColor: palette.paper },
   selectedPage: { borderColor: palette.paper, borderWidth: 1.5 },
-  conflict: { borderColor: color.signal, borderWidth: 1.5 },
+  conflict: { borderColor: palette.paper, borderWidth: 1.5, borderStyle: 'dashed' },
   pageLabel: { marginTop: 'auto' },
   conflictLabel: { position: 'absolute', right: 4, top: 4 },
   pressed: { opacity: 0.75 },
