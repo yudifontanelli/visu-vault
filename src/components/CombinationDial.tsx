@@ -1,4 +1,3 @@
-import * as Haptics from 'expo-haptics';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   AccessibilityActionEvent,
@@ -32,7 +31,20 @@ import {
   snapRotation,
   valueAtRotation,
 } from '../lib/combination';
-import { colors, fonts } from '../theme';
+import { haptic } from '../design/haptics';
+import { svgFont } from '../design/fonts';
+import { palette } from '../design/tokens';
+
+/** Dial materials: graphite metal, paper-white engraving. */
+const colors = {
+  graphite800: palette.graphite800,
+  graphite700: palette.graphite700,
+  graphite600: palette.graphite600,
+  graphite500: palette.graphite500,
+  graphite400: palette.graphite400,
+  offWhite: palette.paper,
+  offWhiteDim: palette.paperDim,
+};
 
 /** Letters printed on the inner ring, same visual size as the numbers. */
 const BRAND_LETTERS = 'VISUVAULT'.split('');
@@ -56,23 +68,6 @@ const SCALE_FONT_SIZE = 19;
 
 const useNativeDriver = Platform.OS !== 'web';
 const isWeb = Platform.OS === 'web';
-
-function haptic(kind: 'tick' | 'press' | 'success' | 'error') {
-  if (isWeb) return;
-  const run = async () => {
-    switch (kind) {
-      case 'tick':
-        return Haptics.selectionAsync();
-      case 'press':
-        return Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      case 'success':
-        return Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      case 'error':
-        return Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-    }
-  };
-  run().catch(() => undefined);
-}
 
 const round2 = (v: number) => Math.round(v * 100) / 100;
 
@@ -435,19 +430,70 @@ const StaticBase = memo(function StaticBase() {
           <Stop offset="1" stopColor="#000" stopOpacity="0" />
         </RadialGradient>
         <LinearGradient id="bezel" x1="0.2" y1="0" x2="0.8" y2="1">
-          <Stop offset="0" stopColor="#5A5B61" />
+          <Stop offset="0" stopColor="#5E5B56" />
           <Stop offset="0.45" stopColor={colors.graphite700} />
-          <Stop offset="1" stopColor="#08080A" />
+          <Stop offset="1" stopColor="#080808" />
         </LinearGradient>
         <LinearGradient id="groove" x1="0.2" y1="0" x2="0.8" y2="1">
-          <Stop offset="0" stopColor="#060607" />
-          <Stop offset="1" stopColor="#3B3C41" />
+          <Stop offset="0" stopColor="#070706" />
+          <Stop offset="1" stopColor="#3D3B38" />
         </LinearGradient>
       </Defs>
       <Circle cx={C} cy={C + 5} r={R_BEZEL + 4} fill="url(#dropShadow)" />
       <Circle cx={C} cy={C} r={R_BEZEL} fill="url(#bezel)" />
       <Circle cx={C} cy={C} r={R_BEZEL - 1} fill="none" stroke="#ffffff" strokeOpacity={0.07} />
       <Circle cx={C} cy={C} r={R_GROOVE} fill="url(#groove)" />
+      <Inscription />
+    </>
+  );
+});
+
+/**
+ * Engraved maker's inscription on the fixed bezel, read like a coin: clockwise
+ * across the top half, upright along the bottom. Gaps leave room for the
+ * indicator and the four bolts.
+ */
+const INSCRIPTION: { text: string; center: number; flip?: boolean }[] = [
+  { text: 'COFRE', center: 336 },
+  { text: 'Nº 01', center: 22 },
+  { text: 'ARTE · MODA · CINEMA', center: 90 },
+  { text: 'VISUVAULT — ARQUIVO PRIVADO', center: 180, flip: true },
+  { text: 'CULTURA VISUAL', center: 270 },
+];
+const R_INSCRIPTION = 186;
+const INSCRIPTION_SIZE = 7.2;
+const INSCRIPTION_STEP = 1.95; // degrees per character
+
+const Inscription = memo(function Inscription() {
+  const glyphs = useMemo(() => {
+    const out: { key: string; ch: string; angle: number; flip: boolean }[] = [];
+    for (const seg of INSCRIPTION) {
+      const chars = seg.text.split('');
+      chars.forEach((ch, i) => {
+        if (ch === ' ') return;
+        const offset = (i - (chars.length - 1) / 2) * INSCRIPTION_STEP;
+        out.push({ key: `${seg.center}-${i}`, ch, angle: seg.flip ? seg.center - offset : seg.center + offset, flip: !!seg.flip });
+      });
+    }
+    return out;
+  }, []);
+  return (
+    <>
+      {glyphs.map((g) => (
+        <SvgText
+          key={g.key}
+          x={C}
+          y={(g.flip ? C + R_INSCRIPTION : C - R_INSCRIPTION) + INSCRIPTION_SIZE * 0.36}
+          transform={`rotate(${round2(g.flip ? g.angle - 180 : g.angle)} ${C} ${C})`}
+          fill={colors.offWhite}
+          fillOpacity={0.5}
+          fontSize={INSCRIPTION_SIZE}
+          fontFamily={svgFont.mono}
+          textAnchor="middle"
+        >
+          {g.ch}
+        </SvgText>
+      ))}
     </>
   );
 });
@@ -494,7 +540,7 @@ const DialFace = memo(function DialFace() {
           y1={a.y}
           x2={b.x}
           y2={b.y}
-          stroke={i % 2 ? '#0C0C0E' : colors.graphite500}
+          stroke={i % 2 ? '#0C0C0B' : colors.graphite500}
           strokeWidth={1.4}
         />,
       );
@@ -542,7 +588,7 @@ const DialFace = memo(function DialFace() {
             fill={colors.offWhite}
             fontSize={SCALE_FONT_SIZE}
             fontWeight="600"
-            fontFamily={fonts.svg}
+            fontFamily={svgFont.sans}
             textAnchor="middle"
             letterSpacing={1}
           >
@@ -566,7 +612,7 @@ const DialFace = memo(function DialFace() {
             fill={colors.offWhite}
             fontSize={SCALE_FONT_SIZE}
             fontWeight="600"
-            fontFamily={fonts.svg}
+            fontFamily={svgFont.sans}
             textAnchor="middle"
           >
             {ch}
@@ -589,7 +635,7 @@ const DialFace = memo(function DialFace() {
           y1={a.y}
           x2={b.x}
           y2={b.y}
-          stroke={i % 2 ? '#0B0B0D' : colors.graphite400}
+          stroke={i % 2 ? '#0B0B0A' : colors.graphite400}
           strokeWidth={2}
         />,
       );
@@ -601,16 +647,16 @@ const DialFace = memo(function DialFace() {
     <>
       <Defs>
         <RadialGradient id="face" cx="50%" cy="50%" r="50%" fx="38%" fy="30%">
-          <Stop offset="0" stopColor="#34353A" />
+          <Stop offset="0" stopColor="#363431" />
           <Stop offset="0.7" stopColor={colors.graphite800} />
-          <Stop offset="1" stopColor="#101012" />
+          <Stop offset="1" stopColor="#111010" />
         </RadialGradient>
         <RadialGradient id="knobBase" cx="50%" cy="50%" r="50%">
           <Stop offset="0.75" stopColor={colors.graphite600} />
-          <Stop offset="1" stopColor="#0B0B0D" />
+          <Stop offset="1" stopColor="#0B0B0A" />
         </RadialGradient>
       </Defs>
-      <Circle cx={C} cy={C} r={R_FACE_EDGE} fill="#0E0E10" />
+      <Circle cx={C} cy={C} r={R_FACE_EDGE} fill="#0F0E0E" />
       {knurl}
       <Circle cx={C} cy={C} r={R_FACE} fill="url(#face)" />
       <Circle cx={C} cy={C} r={R_FACE - 1} fill="none" stroke="#ffffff" strokeOpacity={0.06} />
@@ -655,9 +701,9 @@ const KnobCap = memo(function KnobCap() {
     <>
       <Defs>
         <RadialGradient id="cap" cx="50%" cy="50%" r="50%" fx="36%" fy="28%">
-          <Stop offset="0" stopColor="#6A6B71" />
+          <Stop offset="0" stopColor="#6C6964" />
           <Stop offset="0.55" stopColor={colors.graphite700} />
-          <Stop offset="1" stopColor="#141416" />
+          <Stop offset="1" stopColor="#141413" />
         </RadialGradient>
         <LinearGradient id="capRim" x1="0" y1="0" x2="0" y2="1">
           <Stop offset="0" stopColor="#ffffff" stopOpacity="0.35" />
