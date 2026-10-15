@@ -15,7 +15,7 @@ import { hydrateWorkspace } from './state/store';
 
 NativeSplash.preventAutoHideAsync().catch(() => undefined);
 
-type Phase = 'loading' | 'splash' | 'lock' | 'workspace';
+type Phase = 'splash' | 'lock' | 'workspace';
 
 /**
  * Demo session: the dial opens the workspace in memory. No accounts, no
@@ -23,18 +23,20 @@ type Phase = 'loading' | 'splash' | 'lock' | 'workspace';
  */
 export default function App() {
   const [fontsLoaded, fontError] = useFonts(fontAssets);
-  const [phase, setPhase] = useState<Phase>('loading');
+  const ready = fontsLoaded || !!fontError;
+  const [phase, setPhase] = useState<Phase>('splash');
   const [lockActive, setLockActive] = useState(false);
 
   useEffect(() => {
-    if (!fontsLoaded && !fontError) return;
-    setFontsAvailable(fontsLoaded && !fontError);
+    if (!ready) return;
     hydrateWorkspace().catch(() => undefined);
-    setPhase('splash');
     NativeSplash.hideAsync().catch(() => undefined);
-  }, [fontsLoaded, fontError]);
+  }, [ready]);
 
-  if (phase === 'loading') return <View style={[styles.root, styles.paper]} />;
+  // Keep the native splash's paper colour until the typefaces are in.
+  if (!ready) return <View style={[styles.root, styles.paper]} />;
+  // Idempotent; must run before the first text renders.
+  setFontsAvailable(fontsLoaded && !fontError);
 
   return (
     <SafeAreaProvider>
