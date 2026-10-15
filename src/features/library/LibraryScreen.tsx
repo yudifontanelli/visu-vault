@@ -108,7 +108,7 @@ export function LibraryScreen() {
   ) : (
     <View style={styles.filtersPhone}>
       <Field placeholder="Buscar no acervo…" value={query} onChangeText={setQuery} accessibilityLabel="Buscar no acervo" />
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
+      <ScrollView horizontal style={styles.noGrow} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
         {[null, ...CATEGORIES].map((c) => (
           <Pressable key={c ?? 'all'} onPress={() => setCategory(c)} accessibilityRole="button" accessibilityState={{ selected: c === category }} hitSlop={4}>
             <Tag filled={c === category}>{`${c ?? 'Todas'} · ${c ? counts[c] : PLATES.length}`}</Tag>
@@ -356,6 +356,7 @@ function Lightbox({
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
+  noGrow: { flexGrow: 0, flexShrink: 0 },
   row: { flexDirection: 'row', gap: 32, alignItems: 'flex-start' },
   filters: { width: 240, gap: 26 },
   filtersPhone: { gap: 12 },

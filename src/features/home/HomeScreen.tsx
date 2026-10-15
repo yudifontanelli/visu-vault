@@ -173,7 +173,7 @@ export function HomeScreen() {
         </T>
         <Button label="Ver acervo" trailing="→" variant="ghost" size="sm" onPress={() => go('library')} />
       </View>
-      <ScrollView horizontal={isPhone} scrollEnabled={isPhone} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.plates}>
+      <ScrollView horizontal={isPhone} scrollEnabled={isPhone} style={styles.noGrow} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.plates}>
         {latest.map((p, i) => (
           <Hoverable key={p.id} onPress={() => go('library', { plateId: p.id })} accessibilityLabel={`Abrir ${p.title}`}>
             {({ hovered }) => (
@@ -246,6 +246,7 @@ export function HomeScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
+  noGrow: { flexGrow: 0, flexShrink: 0 },
   pressed: { opacity: 0.65 },
   underline: { textDecorationLine: 'underline' },
   mastRow: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', gap: 24, marginBottom: 12 },

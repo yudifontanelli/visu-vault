@@ -24,7 +24,7 @@ export const BOARD = { width: 2400, height: 1600, grid: 24 } as const;
 export const ITEM_SIZE: Record<BoardItemKind, { w: number; h: number }> = {
   note: { w: 216, h: 168 },
   reference: { w: 264, h: 132 },
-  plate: { w: 216, h: 264 },
+  plate: { w: 216, h: 288 },
   heading: { w: 456, h: 72 },
 };
 
